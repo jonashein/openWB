@@ -141,6 +141,11 @@ function setChargingCurrenttwcmanager () {
 		curl -s --connect-timeout 3 "http://$twcmanagerlp1ip/index.php?&nonScheduledAmpsMax=$current&submit=Save" > /dev/null
 	fi
 }
+function setChargingCurrenthttp () {
+	if [[ $evsecon == "httpevse" ]]; then
+		curl -s --connect-timeout 3 "http://$httpevseip/setcurrent?current=$current" > /dev/null
+	fi
+}
 # function for setting the current - go-e charger
 # Parameters:
 # 1: current
@@ -160,8 +165,8 @@ function setChargingCurrentgoe () {
 			if ((state == "0")) ; then
 				 curl --silent --connect-timeout $goetimeoutlp1 -s http://$goeiplp1/mqtt?payload=alw=1 > /dev/null
 			fi
-			oldcurrent=$(echo $output | jq -r '.amp')
-			if (( oldcurrent != $current )) ; then
+			oldgoecurrent=$(echo $output | jq -r '.amp')
+			if (( oldgoecurrent != $current )) ; then
 				curl --silent --connect-timeout $goetimeoutlp1 -s http://$goeiplp1/mqtt?payload=amp=$current > /dev/null
 			fi
 		fi
@@ -221,6 +226,9 @@ function setChargingCurrent () {
 	fi
 	if [[ $evsecon == "buchse" ]]; then
 		setChargingCurrentBuchse $current
+	fi
+	if [[ $evsecon == "http" ]]; then
+		setChargingCurrenthttp $current
 	fi
 
 	if [[ $evsecon == "modbusevse" ]]; then
