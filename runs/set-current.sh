@@ -42,7 +42,7 @@ lp8enabled=$(<ramdisk/lp8enabled)
 #####
 #
 # functions
-# 
+#
 #####
 # function for setting the current - dac
 # Parameters:
@@ -51,8 +51,8 @@ lp8enabled=$(<ramdisk/lp8enabled)
 function setChargingCurrentDAC () {
 	current=$1
 	dacregister=$2
-	# set desired charging current 
-	# INFO: needs new dac.py to accept current and use translation table 
+	# set desired charging current
+	# INFO: needs new dac.py to accept current and use translation table
 	sudo python /var/www/html/openWB/runs/dac.py $current $dacregister
 }
 # function for setting the current - extopenwb
@@ -123,7 +123,7 @@ function setChargingCurrentThirdeth () {
 # function for setting the current - WiFi
 # Parameters:
 # 1: current
-# 2: evsewifitimeoutlp1 
+# 2: evsewifitimeoutlp1
 # 3: evsewifiiplp1
 function setChargingCurrentWifi () {
 	if [[ $evsecon == "simpleevsewifi" ]]; then
@@ -163,7 +163,7 @@ function setChargingCurrenthttp () {
 # function for setting the current - go-e charger
 # Parameters:
 # 1: current
-# 2: goetimeoutlp1 
+# 2: goetimeoutlp1
 # 3: goeiplp1
 function setChargingCurrentgoe () {
 	if [[ $evsecon == "goe" ]]; then
@@ -197,8 +197,8 @@ function setChargingCurrentkeba () {
 			echo -n "ena 0" | socat - UDP-DATAGRAM:$kebaiplp1:7090
 		else
 			echo -n "ena 1" | socat - UDP-DATAGRAM:$kebaiplp1:7090
-			echo -n "curr $kebacurr" | socat - UDP-DATAGRAM:$kebaiplp1:7090	
-			echo -n "display 1 10 10 0 S$current" | socat - UDP-DATAGRAM:$kebaiplp1:7090	
+			echo -n "curr $kebacurr" | socat - UDP-DATAGRAM:$kebaiplp1:7090
+			echo -n "display 1 10 10 0 ${current}A" | socat - UDP-DATAGRAM:$kebaiplp1:7090	
 		fi
 	fi
 }
@@ -249,7 +249,7 @@ function setChargingCurrent () {
 	fi
 
 	if [[ $evsecon == "modbusevse" ]]; then
-		setChargingCurrentModbus $current $modbusevsesource $modbusevseid 
+		setChargingCurrentModbus $current $modbusevsesource $modbusevseid
 	fi
 
 	if [[ $evsecon == "simpleevsewifi" ]]; then
@@ -259,14 +259,14 @@ function setChargingCurrent () {
 		setChargingCurrentgoe $current $goetimeoutlp1 $goeiplp1
 	fi
 	if [[ $evsecon == "slaveeth" ]]; then
-		setChargingCurrentSlaveeth $current 
+		setChargingCurrentSlaveeth $current
 	fi
 	if [[ $evsecon == "thirdeth" ]]; then
-		setChargingCurrentThirdeth $current 
+		setChargingCurrentThirdeth $current
 	fi
 
 	if [[ $evsecon == "masterethframer" ]]; then
-		setChargingCurrentMasterethframer $current 
+		setChargingCurrentMasterethframer $current
 	fi
 	if [[ $evsecon == "nrgkick" ]]; then
 		setChargingCurrentnrgkick $current $nrgkicktimeoutlp1 $nrgkickiplp1 $nrgkickmaclp1 $nrgkickpwlp1
@@ -284,14 +284,14 @@ function setChargingCurrent () {
 
 #####
 #
-# main routine 
+# main routine
 #
 #####
 
 # input validation
 let current=$1
-if [[ current -lt 0 ]] | [[ current -gt 32 ]]; then 
-	if [[ $debug == "2" ]]; then 
+if [[ current -lt 0 ]] | [[ current -gt 32 ]]; then
+	if [[ $debug == "2" ]]; then
 		echo "ungültiger Wert für Ladestrom" > /var/www/html/openWB/web/lade.log
 	fi
 	exit 1
@@ -305,17 +305,17 @@ if !([[ $2 == "all" ]] || [[ $2 == "m" ]] || [[ $2 == "s1" ]] || [[ $2 == "s2" ]
 fi
 
 # value below threshold
-if [[ current -lt 6 ]]; then 
-	if [[ $debug == "2" ]]; then 
+if [[ current -lt 6 ]]; then
+	if [[ $debug == "2" ]]; then
 		echo "Ladestrom < 6A, setze auf 0A"
 	fi
 	current=0
 	lstate=0
 else
 	lstate=1
-fi 
+fi
 
-# set desired charging current 
+# set desired charging current
 
 if [[ $debug == "2" ]]; then
 	echo "setze ladung auf $current" >> /var/www/html/openWB/web/lade.log
@@ -445,7 +445,7 @@ fi
 
 # set charging current - third charging point
 if [[ $lastmanagements2 == "1" ]]; then
-	if [[ $points == "all" ]] || [[ $points == "s2" ]]; then 
+	if [[ $points == "all" ]] || [[ $points == "s2" ]]; then
 		evsecon=$evsecons2
 		dacregister=$dacregisters2
 		modbusevsesource=$evsesources2
@@ -494,7 +494,7 @@ if [[ $lastmanagementlp4 == "1" ]]; then
 	fi
 fi
 if [[ $lastmanagementlp5 == "1" ]]; then
-	if [[ $points == "all" ]] || [[ $points == "lp5" ]]; then 
+	if [[ $points == "all" ]] || [[ $points == "lp5" ]]; then
 		evsecon=$evseconlp5
 		evseip=$evseiplp5
 		ipevseid=$evseidlp5
@@ -515,7 +515,7 @@ if [[ $lastmanagementlp5 == "1" ]]; then
 	fi
 fi
 if [[ $lastmanagementlp6 == "1" ]]; then
-	if [[ $points == "all" ]] || [[ $points == "lp6" ]]; then 
+	if [[ $points == "all" ]] || [[ $points == "lp6" ]]; then
 		evsecon=$evseconlp6
 		evseip=$evseiplp6
 		ipevseid=$evseidlp6
@@ -536,7 +536,7 @@ if [[ $lastmanagementlp6 == "1" ]]; then
 	fi
 fi
 if [[ $lastmanagementlp7 == "1" ]]; then
-	if [[ $points == "all" ]] || [[ $points == "lp7" ]]; then 
+	if [[ $points == "all" ]] || [[ $points == "lp7" ]]; then
 		evsecon=$evseconlp7
 		evseip=$evseiplp7
 		ipevseid=$evseidlp7
@@ -557,7 +557,7 @@ if [[ $lastmanagementlp7 == "1" ]]; then
 	fi
 fi
 if [[ $lastmanagementlp8 == "1" ]]; then
-	if [[ $points == "all" ]] || [[ $points == "lp8" ]]; then 
+	if [[ $points == "all" ]] || [[ $points == "lp8" ]]; then
 		evsecon=$evseconlp8
 		evseip=$evseiplp8
 		ipevseid=$evseidlp8
