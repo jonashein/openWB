@@ -17,8 +17,14 @@ def main():
   args = parser.parse_args()
 
   client = mqtt.Client("openWB-python-bulkpublisher-" + str(os.getpid()))
-  client.connect("localhost")
-
+  connected_flag=False
+  while not connected_flag: #wait in loop
+    try:
+      client.connect("localhost")
+      connected_flag=True
+    except:
+      print("Warten auf MQTT Broker")
+      time.sleep(5)
   for line in sys.stdin:
     m = re.match('(.*)=(.*)', line)
     if m:

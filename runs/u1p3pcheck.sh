@@ -8,7 +8,7 @@ if [[ "$1" == "1" ]]; then
 		sudo python runs/u1p3premote.py $evseiplp1 $u1p3plp2id 1
 	fi
   if [[ $evsecon == "keba" ]]; then
-		sudo python runs/keba_u1p3p.py $kebaiplp1 1
+		runs/keba_u1p3p.sh $kebaiplp1 1
 	fi
 	if [[ $evsecon == "extopenwb" ]]; then
 		mosquitto_pub -r -t openWB/set/isss/U1p3p -h $chargep1ip -m "1"
@@ -17,7 +17,7 @@ if [[ "$1" == "1" ]]; then
 		sudo python runs/u1p3premote.py $evseiplp2 $u1p3plp2id 1
 	fi
   if [[ $lastmanagement == 1 && $evsecons1 == "keba" && $u1p3plp2aktiv == "1" ]]; then
-		sudo python runs/keba_u1p3p.py $kebaiplp2 1
+		runs/keba_u1p3p.sh $kebaiplp2 1
 	fi
 	if [[ $lastmanagement == 1 && $evsecons1 == "extopenwb" ]]; then
 		mosquitto_pub -r -t openWB/set/isss/U1p3p -h $chargep2ip -m "1"
@@ -30,7 +30,7 @@ if [[ "$1" == "1" ]]; then
 		sudo python runs/u1p3premote.py $evseiplp3 $u1p3plp3id 1
 	fi
   if [[ $lastmanagements2 == 1 && $evsecons2 == "keba" && $u1p3plp3aktiv == "1" ]]; then
-		sudo python runs/keba_u1p3p.py $kebaiplp3 1
+		runs/keba_u1p3p.sh $kebaiplp3 1
 	fi
 	if [[ $lastmanagementlp4 == 1 && $evseconlp4 == "ipevse" && $u1p3plp4aktiv == "1" ]]; then
 		sudo python runs/u1p3premote.py $evseiplp4 $u1p3plp4id 1
@@ -66,19 +66,19 @@ if [[ "$1" == "3" ]]; then
 		sudo python runs/u1p3premote.py $evseiplp1 $u1p3plp2id 3
 	fi
   if [[ $evsecon == "keba" ]]; then
-		sudo python runs/keba_u1p3p.py $kebaiplp1 3
+		runs/keba_u1p3p.sh $kebaiplp1 3
 	fi
 	if [[ $lastmanagement == 1 && $evsecons1 == "ipevse" && $u1p3plp2aktiv == "1" ]]; then
 		sudo python runs/u1p3premote.py $evseiplp2 $u1p3plp2id 3
 	fi
   if [[ $lastmanagement == 1 && $evsecons1 == "keba" && $u1p3plp2aktiv == "1" ]]; then
-		sudo python runs/keba_u1p3p.py $kebaiplp2 3
+		runs/keba_u1p3p.sh $kebaiplp2 3
 	fi
 	if [[ $lastmanagements2 == 1 && $evsecons2 == "ipevse" && $u1p3plp3aktiv == "1" ]]; then
 		sudo python runs/u1p3premote.py $evseiplp3 $u1p3plp3id 3
 	fi
   if [[ $lastmanagements2 == 1 && $evsecons2 == "keba" && $u1p3plp3aktiv == "1" ]]; then
-		sudo python runs/keba_u1p3p.py $kebaiplp3 3
+		runs/keba_u1p3p.sh $kebaiplp3 3
 	fi
 	if [[ $lastmanagementlp4 == 1 && $evseconlp4 == "ipevse" && $u1p3plp4aktiv == "1" ]]; then
 		sudo python runs/u1p3premote.py $evseiplp4 $u1p3plp4id 3

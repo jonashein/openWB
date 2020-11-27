@@ -1061,6 +1061,13 @@ def on_message(client, userdata, msg):
 client.on_connect = on_connect
 client.on_message = on_message
 
-client.connect(mqtt_broker_ip, 1883)
+connected_flag=False
+while not connected_flag: #wait in loop
+    try:
+        client.connect(mqtt_broker_ip, 1883)
+        connected_flag=True
+    except:
+        print("Warten auf MQTT Broker")
+        time.sleep(5)
 client.loop_forever()
 client.disconnect()
