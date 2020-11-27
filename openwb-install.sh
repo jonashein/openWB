@@ -37,11 +37,11 @@ if ! [ -x "$(command -v apachectl)" ]; then
 	sleep 1
 	apt-get -qq install -y php-gd
 	sleep 1
-	apt-get -qq install -y php7.0-xml
+	apt-get -qq install -y php7.3-xml
 	sleep 2
 	apt-get -qq install -y php-curl
 	sleep 1	
-	apt-get -qq install -y libapache2-mod-php7.0
+	apt-get -qq install -y libapache2-mod-php7.3
 	sleep 2
 	apt-get -qq install -y jq
 	sleep 2
@@ -82,8 +82,8 @@ fi
 echo "check for initial git clone"
 if [ ! -d /var/www/html/openWB/web ]; then
 	cd /var/www/html/
-	git clone https://github.com/snaptec/openWB.git --branch master
 	chown -R pi:pi openWB 
+	git clone https://github.com/jonashein/openWB.git --branch master
 	echo "... git cloned"
 else
 	echo "...ok"
@@ -138,17 +138,18 @@ else
 fi
 
 echo "disable cronjob logging"
-if grep -Fxq "EXTRA_OPTS="-L 0"" /etc/default/cron
+if grep -Fxq 'EXTRA_OPTS="-L 0"' /etc/default/cron
 then
 	echo "...ok"
 else
-	echo "EXTRA_OPTS="-L 0"" >> /etc/default/cron
+	echo 'EXTRA_OPTS="-L 0"' >> /etc/default/cron
 fi
-sudo /bin/su -c "echo 'upload_max_filesize = 300M' > /etc/php/7.0/apache2/conf.d/20-uploadlimit.ini"
-sudo /bin/su -c "echo 'post_max_size = 300M' >> /etc/php/7.0/apache2/conf.d/20-uploadlimit.ini"
+sudo /bin/su -c "echo 'upload_max_filesize = 300M' > /etc/php/7.3/apache2/conf.d/20-uploadlimit.ini"
+sudo /bin/su -c "echo 'post_max_size = 300M' >> /etc/php/7.3/apache2/conf.d/20-uploadlimit.ini"
 sudo apt-get -qq install -y python-pip
 sudo pip install  -U pymodbus
-echo "www-data ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/010_pi-nopasswd
+echo "www-data ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/010_www-data-nopassed
+chmod 440 /etc/sudoers.d/010_www-data-nopasswd
 
 chmod 777 /var/www/html/openWB/openwb.conf
 chmod +x /var/www/html/openWB/modules/*
